@@ -24,7 +24,7 @@ def test_dynamic_retrieval(retriever):
     
     # Test case 1: precedence and superseded filtering
     tc1 = test_cases[0]
-    results1 = retriever.search(tc1["query"], top_k=tc1["top_k"], include_superseded=tc1["include_superseded"])
+    results1 = retriever.search(tc1["query"], top_k=tc1["top_k"])
     source_ids1 = [r["source_id"] for r in results1]
     assert tc1["excluded_source"] not in source_ids1
 
