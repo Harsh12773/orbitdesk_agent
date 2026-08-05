@@ -55,7 +55,6 @@ class SupportAgentGraph:
             }
         )
 
-        workflow.add_edge("retrieve", "generate")
         workflow.add_edge("generate", "verify")
 
         workflow.add_conditional_edges(
