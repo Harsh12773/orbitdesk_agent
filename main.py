@@ -22,6 +22,13 @@ def main():
 
             result = graph.run(q)
 
+            trace = result.pop("node_trace", [])
+            
+            print("\n" + "-" * 40)
+            print("GRAPH EXECUTION TRACE:")
+            print("-" * 40)
+            print(" -> ".join(trace))
+
             print("\n" + "-" * 40)
             print("READABLE RESPONSE:")
             print("-" * 40)
@@ -39,3 +46,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+    """I am a read-only Viewer. Can I create an API credential for a reporting script?"""
+    """Our data sync is not working. Can you tell me how to fix it?"""
+    """I am unhappy and want my money returned to my card."""
