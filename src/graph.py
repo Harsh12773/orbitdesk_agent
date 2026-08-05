@@ -42,11 +42,13 @@ class SupportAgentGraph:
 
         workflow.set_entry_point("triage")
 
+        workflow.add_edge("triage", "retrieve")
+
         workflow.add_conditional_edges(
-            "triage",
+            "retrieve",
             self.route_after_triage,
             {
-                "retrieve": "retrieve",
+                "generate": "generate",
                 "clarification": "clarification",
                 "escalation": "escalation",
                 "out_of_scope": "out_of_scope"
@@ -155,11 +157,11 @@ class SupportAgentGraph:
     def clarification_node(self, state: AgentState) -> Dict[str, Any]:
         """Dynamically generates clarification response using LLM."""
         trace = state.get("node_trace", []) + ["clarification"]
-        output = self.llm.generate_response(state["question"], [], "requires_clarification")
+        output = self.llm.generate_response(state["question"], state.get("retrieved_docs", []), "requires_clarification")
         return {
             "classification": "requires_clarification",
             "generated_answer": output["answer"],
-            "sources": [],
+            "sources": output["sources"],
             "confidence": output["confidence"],
             "requires_human": output["requires_human"],
             "reason": output["reason"],
@@ -169,11 +171,11 @@ class SupportAgentGraph:
     def escalation_node(self, state: AgentState) -> Dict[str, Any]:
         """Dynamically generates escalation response using LLM."""
         trace = state.get("node_trace", []) + ["escalation"]
-        output = self.llm.generate_response(state["question"], [], "requires_escalation")
+        output = self.llm.generate_response(state["question"], state.get("retrieved_docs", []), "requires_escalation")
         return {
             "classification": "requires_escalation",
             "generated_answer": output["answer"],
-            "sources": [],
+            "sources": output["sources"],
             "confidence": output["confidence"],
             "requires_human": output["requires_human"],
             "reason": output["reason"],
@@ -183,11 +185,11 @@ class SupportAgentGraph:
     def out_of_scope_node(self, state: AgentState) -> Dict[str, Any]:
         """Dynamically generates out of scope response using LLM."""
         trace = state.get("node_trace", []) + ["out_of_scope"]
-        output = self.llm.generate_response(state["question"], [], "out_of_scope")
+        output = self.llm.generate_response(state["question"], state.get("retrieved_docs", []), "out_of_scope")
         return {
             "classification": "out_of_scope",
             "generated_answer": output["answer"],
-            "sources": [],
+            "sources": output["sources"],
             "confidence": output["confidence"],
             "requires_human": output["requires_human"],
             "reason": output["reason"],
@@ -210,7 +212,7 @@ class SupportAgentGraph:
 
     # --- ROUTING LOGIC ---
 
-    def route_after_triage(self, state: AgentState) -> Literal["retrieve", "clarification", "escalation", "out_of_scope"]:
+    def route_after_triage(self, state: AgentState) -> Literal["generate", "clarification", "escalation", "out_of_scope"]:
         cls = state.get("classification")
         if cls == "requires_clarification":
             return "clarification"
@@ -218,7 +220,7 @@ class SupportAgentGraph:
             return "escalation"
         elif cls == "out_of_scope":
             return "out_of_scope"
-        return "retrieve"
+        return "generate"
 
     def route_after_verification(self, state: AgentState) -> Literal["end", "retry", "safe_failure"]:
         if state.get("verification_passed", False):
@@ -249,6 +251,7 @@ class SupportAgentGraph:
         else:
             final_state = state.copy()
             final_state.update(self.triage_node(final_state))
+            final_state.update(self.retrieval_node(final_state))
             route = self.route_after_triage(final_state)
             
             if route == "clarification":
@@ -258,7 +261,6 @@ class SupportAgentGraph:
             elif route == "out_of_scope":
                 final_state.update(self.out_of_scope_node(final_state))
             else:
-                final_state.update(self.retrieval_node(final_state))
                 final_state.update(self.generation_node(final_state))
                 final_state.update(self.verification_node(final_state))
                 
