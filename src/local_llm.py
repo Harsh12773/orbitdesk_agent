@@ -88,7 +88,7 @@ class LocalLLM:
         elif classification == "safe_failure":
             instruction = "The system could not generate a verified safe answer. Apologize and state that the request has been routed to a human agent."
         else:
-            instruction = "Answer the user's question directly and concisely based ONLY on the provided context."
+            instruction = "You are a precise technical support AI. Answer the user's question directly based ONLY on the provided context. If the context states that a user cannot perform an action, you MUST explicitly state that they cannot."
 
         prompt = (
             f"<|im_start|>system\n{instruction}<|im_end|>\n"

@@ -30,7 +30,7 @@ class Verifier:
         answer_text = response_data.get("answer", "")
         if self.llm and self.llm.pipeline is not None:
             prompt = (
-                "<|im_start|>system\nYou are a strict safety checker. If the text violates policies, output EXACTLY the word 'VIOLATION'. If it is safe, output EXACTLY the word 'SAFE'. Do not output anything else.<|im_end|>\n"
+                "<|im_start|>system\nYou are a safety classification AI. Classify the text as exactly 'SAFE' or 'UNSAFE'. Do not output anything else.<|im_end|>\n"
                 f"<|im_start|>user\nDoes the following text violate company safety policies (such as offering unauthorized financial compensation or legal advice)?\nText: {answer_text}<|im_end|>\n"
                 "<|im_start|>assistant\n"
             )
@@ -40,7 +40,7 @@ class Verifier:
                     sys_warnings.simplefilter("ignore")
                     out = self.llm.pipeline(prompt, max_new_tokens=5, return_full_text=False)
                     gen_text = out[0]["generated_text"].strip().lower()
-                    if "violation" in gen_text:
+                    if "unsafe" in gen_text or ("safe" not in gen_text and len(gen_text) > 0):
                         passed = False
                         warnings.append("AI Safety check failed: Policy violation detected in the generated response.")
             except Exception:
