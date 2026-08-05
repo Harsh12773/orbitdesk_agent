@@ -25,5 +25,18 @@
       "expected_classification": "safe_failure",
       "expected_nodes": ["triage", "retrieve", "generate", "verify", "safe_failure"]
     }
+  ],
+  "retrieval_tests": [
+    {
+      "query": "something about precedence",
+      "top_k": 3,
+      "include_superseded": false,
+      "excluded_source": "CASE-123"
+    },
+    {
+      "query": "How do I change my workspace timezone settings in OrbitDesk?",
+      "top_k": 3,
+      "expected_any_of": ["KB-003", "CASE-1041"]
+    }
   ]
 }
