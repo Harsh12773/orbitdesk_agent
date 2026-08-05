@@ -3,7 +3,7 @@ from pathlib import Path
 
 # Paths to assignment files
 BASE_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = BASE_DIR.parent / "AI Engineer Internship - Assignment material"
+DATA_DIR = BASE_DIR / "data"
 
 KNOWLEDGE_BASE_DIR = DATA_DIR / "knowledge_base"
 RESOLVED_CASES_PATH = DATA_DIR / "resolved_cases.json"
