@@ -85,7 +85,12 @@ class SupportAgentGraph:
         if self.llm and self.llm.pipeline is not None:
             prompt = (
                 "<|im_start|>system\nClassify the following user request into exactly one of these categories: "
-                "'answerable', 'requires_clarification', 'requires_escalation', 'out_of_scope'. Output ONLY the category name.<|im_end|>\n"
+                "'answerable', 'requires_clarification', 'requires_escalation', 'out_of_scope'. Output ONLY the category name.\n"
+                "Examples:\n"
+                "- 'Can a Viewer create an API credential?' -> answerable\n"
+                "- 'My data sync is broken' -> requires_clarification\n"
+                "- 'Render failed twice' -> requires_escalation\n"
+                "- 'Give me a refund' -> out_of_scope\n<|im_end|>\n"
                 f"<|im_start|>user\nRequest: {q}<|im_end|>\n"
                 "<|im_start|>assistant\n"
             )
