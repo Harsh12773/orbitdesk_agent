@@ -1,0 +1,126 @@
+[
+  {
+    "question_id": "Q-001",
+    "classification": "answerable",
+    "answer": "Based on OrbitDesk documentation (KB-004):\n## Troubleshooting a Missed Export\n\nCheck the following in order:\n\n1. Confirm the schedule state and next-run time.\n2. If the workspace timezone recently changed, follow `KB-003` and resave the schedule.\n3. Open **Schedule > Run history** and note the latest run status and error code.\n4. Confirm that the dashboard exists and that the schedule owner can still open it.\n5. Confirm that all required connections are active.\n6. Confirm that the destination is verified and enabled.",
+    "sources": [
+      {
+        "source_id": "KB-004",
+        "passage": "## Troubleshooting a Missed Export\n\nCheck the following in order:\n\n1. Confirm the schedule state and next-run time.\n2. If the workspace timezone recently changed, follow `KB-003` and resave the schedu..."
+      },
+      {
+        "source_id": "CASE-1041",
+        "passage": "Case Title: Recurring export stopped after workspace timezone change\nSymptoms: Workspace timezone changed from Asia/Kolkata to Europe/London Existing daily export did not run at the expected local tim..."
+      },
+      {
+        "source_id": "KB-003",
+        "passage": "## Changing the Timezone\n\nChanging the workspace timezone does not immediately rewrite existing recurring export schedules. Existing schedules retain the timezone stored when they were last saved and ..."
+      }
+    ],
+    "confidence": 0.9,
+    "requires_human": false,
+    "reason": "Answer generated from knowledge base documents (KB-004, CASE-1041, KB-003).",
+    "clarification_question": null,
+    "warnings": [],
+    "node_trace": [
+      "triage",
+      "retrieve",
+      "generate",
+      "verify"
+    ]
+  },
+  {
+    "question_id": "Q-002",
+    "classification": "answerable",
+    "answer": "Based on OrbitDesk documentation (CASE-1058):\nCase Title: Viewer could not create an API credential\nSymptoms: User had the Viewer role Developer settings were not visible\nResolution: Confirmed that Viewers cannot create API credentials An Admin created a narrowly scoped workspace credential for the approved integration The secret was transferred through the customer's approved secret-management process",
+    "sources": [
+      {
+        "source_id": "CASE-1058",
+        "passage": "Case Title: Viewer could not create an API credential\nSymptoms: User had the Viewer role Developer settings were not visible\nResolution: Confirmed that Viewers cannot create API credentials An Admin c..."
+      },
+      {
+        "source_id": "KB-005",
+        "passage": "## Creating a Credential\n\nAn Owner or Admin can create a credential from **Settings > Developer > API credentials**. The secret is shown once at creation and cannot be revealed again. If the secret is..."
+      },
+      {
+        "source_id": "KB-005",
+        "passage": "## Scope Guidance\n\nChoose the narrowest scopes required by the integration. A credential with `dashboards:read` cannot create or edit dashboards. Creating a credential does not grant access beyond the..."
+      }
+    ],
+    "confidence": 0.9,
+    "requires_human": false,
+    "reason": "Answer generated from knowledge base documents (CASE-1058, KB-005, KB-005).",
+    "clarification_question": null,
+    "warnings": [],
+    "node_trace": [
+      "triage",
+      "retrieve",
+      "generate",
+      "verify"
+    ]
+  },
+  {
+    "question_id": "Q-003",
+    "classification": "requires_clarification",
+    "answer": "To help troubleshoot your data sync issue, could you please provide additional mandatory diagnostic details?",
+    "sources": [
+      {
+        "source_id": "KB-006",
+        "passage": "Troubleshooting connections requires connection ID, status, and error logs."
+      }
+    ],
+    "confidence": 0.85,
+    "requires_human": false,
+    "reason": "Request lacks mandatory diagnostic details required for troubleshooting.",
+    "clarification_question": "What is your workspace ID, the name/ID of the affected connection, its current status, and any error code displayed in the run history?",
+    "warnings": [],
+    "node_trace": [
+      "triage",
+      "clarification"
+    ]
+  },
+  {
+    "question_id": "Q-004",
+    "classification": "requires_escalation",
+    "answer": "Since two consecutive export runs have failed with 'render_failed' despite active connections and destinations, this issue requires escalation to the OrbitDesk Rendering Engineering team.\n\nPlease collect and include the following diagnostic information for your support ticket:\n- Workspace ID\n- Dashboard ID\n- Export Schedule ID\n- Failed Run IDs and timestamps\n\nImportant Safety Notice: Do NOT include database passwords, OAuth secrets, API keys, or exported customer dataset content in your ticket.",
+    "sources": [
+      {
+        "source_id": "KB-008",
+        "passage": "Escalation protocol for rendering failures: collect workspace/dashboard IDs without sensitive customer data."
+      },
+      {
+        "source_id": "CASE-1103",
+        "passage": "Repeated render failures escalated to Rendering team with safe workspace metadata."
+      }
+    ],
+    "confidence": 0.95,
+    "requires_human": true,
+    "reason": "Repeated render failures require engineering intervention after standard checks pass.",
+    "clarification_question": null,
+    "warnings": [],
+    "node_trace": [
+      "triage",
+      "escalation"
+    ]
+  },
+  {
+    "question_id": "Q-005",
+    "classification": "out_of_scope",
+    "answer": "OrbitDesk Support Agent is an automated technical assistant for OrbitDesk workspace operations. I cannot process subscription refunds, modify billing accounts, or provide legal advice. For billing inquiries or subscription changes, please contact our support team through your organization's official account management portal.",
+    "sources": [
+      {
+        "source_id": "KB-010",
+        "passage": "Security and safe responses: out-of-scope requests such as refunds and legal advice must be safely declined."
+      }
+    ],
+    "confidence": 1.0,
+    "requires_human": false,
+    "reason": "Subscription refund and legal advice requests are outside technical support capabilities.",
+    "clarification_question": null,
+    "warnings": [],
+    "node_trace": [
+      "triage",
+      "out_of_scope"
+    ]
+  }
+]
